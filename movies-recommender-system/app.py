@@ -59,33 +59,34 @@ def recommend(movie):
         recommended_movies_posters.append(fetch_poster(movie_id))
     return recommened_movies, recommended_movies_posters
 
-st.title("Movie Recommender System")
+st.title("🎬 Movie Recommender System")
 
-options = st.selectbox(
-    "Select a movie:", 
+selected_movie = st.selectbox(
+    "Select a movie:",
     movies['title'].values
-) 
-
+)
 if st.button("Recommend"):
     recommended_movie_names, recommended_movie_posters = recommend(selected_movie)
 
-    # Create 5 columns
     cols = st.columns(5, gap="medium")
 
     for i, col in enumerate(cols):
+        if i >= len(recommended_movie_names):
+            break
+
         with col:
             title = html.escape(recommended_movie_names[i])
 
-            # Fixed-height title
+            # Keep every movie title the same height
             st.markdown(
                 f"""
                 <div style="
-                    height: 90px;
+                    height: 100px;
                     display: flex;
                     align-items: flex-start;
                     justify-content: center;
                     text-align: center;
-                    font-size: 19px;
+                    font-size: 18px;
                     font-weight: 600;
                     line-height: 1.3;
                     overflow: hidden;
@@ -96,8 +97,16 @@ if st.button("Recommend"):
                 unsafe_allow_html=True
             )
 
-            # Display poster
-            st.image(
-                recommended_movie_posters[i],
-                use_container_width=True
-            )
+            # Display poster at a consistent size
+            poster = recommended_movie_posters[i]
+
+            if poster:
+                st.image(poster, width="stretch")
+            else:
+                st.markdown(
+                    '<div style="height:220px; display:flex; '
+                    'align-items:center; justify-content:center; '
+                    'background:#242424; border-radius:10px;">'
+                    'Poster unavailable</div>',
+                    unsafe_allow_html=True
+                )
