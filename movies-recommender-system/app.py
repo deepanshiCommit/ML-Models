@@ -3,9 +3,22 @@ import pickle
 import pandas as pd
 import requests
 
-movies_dict = pickle.load(open('movies_dict.pkl', 'rb'))
+from pathlib import Path
+
+# Get the directory where app.py is located
+BASE_DIR = Path(__file__).resolve().parent
+
+# Load movie data
+with open(BASE_DIR / "movies_dict.pkl", "rb") as f:
+    movies_dict = pickle.load(f)
+
+# Load similarity matrix
+with open(BASE_DIR / "similarity.pkl", "rb") as f:
+    similarity = pickle.load(f)
+
+
+
 movies = pd.DataFrame(movies_dict)
-similarity = pickle.load(open('similarity.pkl', 'rb'))
 
 
 def fetch_poster(movie_id):
