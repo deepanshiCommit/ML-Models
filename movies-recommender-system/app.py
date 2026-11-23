@@ -73,12 +73,38 @@ if st.button('Recommend'):
     st.success("Recommendations loaded")
     st.caption("TMDB poster images may be unavailable when the TMDB API is blocked or unreachable.")
 
-    columns = st.columns(5)
+    cols = st.columns(5, gap="medium")
 
-    for column, movie_name, poster in zip(columns, movies_names, movies_posters):
-        with column:
-            st.subheader(movie_name)
-            if poster:
-                st.image(poster, use_container_width=True)
-            else:
-                st.info("Poster unavailable")
+for i, col in enumerate(cols):
+    with col:
+        title = html.escape(recommended_movie_names[i])
+        poster = html.escape(
+            recommended_movie_posters[i],
+            quote=True
+        )
+
+        st.markdown(
+            f"""
+            <div style="text-align:center;">
+
+                <div style="
+                    height: 90px;
+                    font-size: 19px;
+                    font-weight: 600;
+                    line-height: 1.3;
+                    overflow: hidden;
+                ">
+                    {title}
+                </div>
+
+                <img src="{poster}"
+                     style="
+                        width: 100%;
+                        height: 240px;
+                        object-fit: cover;
+                        border-radius: 10px;
+                     ">
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
